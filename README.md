@@ -1,1 +1,1 @@
-# ECMAScript6-Note-
+# ECMAScript6-Note
