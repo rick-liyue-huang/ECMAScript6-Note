@@ -114,8 +114,110 @@ function ArrayOf() {
 
 
 /*
-* 3. copyWithin()
+* 3. copyWithin(), array instance method, in the current array, copy the designated elements to the target element
+* target (necessary): replace the elements from here;
+* start (optional): read the designated elements from here
+* end (optional): redad the designated elements until here
+*
+* it means taht this method will change the current array
+* Array.prototype.copyWithin(target, start = 0, end = this.length)
 * */
+
+/*
+[1, 2, 3, 4, 5].copyWithin(0, 3); // [4, 5, 3, 4, 5],
+
+[1, 2, 3, 4, 5].copyWithin(0, 3, 4); // [4, 2, 3, 4, 5]
+
+[1, 2, 3, 4, 5].copyWithin(0, -2, -1); // [4, 2, 3, 4, 5]
+
+
+// 4. array instance find() and findIndex()
+// find(callback) all elements of array execute the callback, until the return boolean value is true, then return the responding element
+[1, 4, -5, 10].find( (n) => n < 0); // -5
+
+[1, 5, 10, 15].find(function (value, index, arr) {
+    return value > 9;
+});
+ // 10
+
+// findIndex() is similar as find(), but return the responding element index
+[1, 5, 10, 15].findIndex(function (value, index, arr) {
+    return value > 9;
+}); // 2
+
+[NaN].indexOf(NaN); // -1
+
+[NaN].findIndex(y => Object.is(NaN, y)); // 0
+
+*/
+
+/*
+* 5. fill(), used to fill the array with designated value, the second argument is the start index, and third arg is end index
+* */
+/*
+['a', 'b', 'c'].fill(7); // [7, 7, 7]
+new Array(3).fill(7); // [7, 7, 7]
+
+['a', 'b', 'c'].fill(7, 1, 2); // ['a', 7, 'c']
+
+*/
+
+/*
+* 6. array instance has three methods of entries(), keys(), values(). they all used for loop array, we can use for..of statement
+* to loop for the array, the keys() is for key, the values() is for value, the entries() is for key-value loop
+* */
+
+/*
+for (let index of ['a', 'b'].keys()) {
+    console.log(index); // 0, 1
+}
+
+for (let elem of ['a', 'b'].values()) {
+    console.log(elem); // 'a'  'b'
+}
+
+for (let [index, elem] of ['a', 'b'].entries()) {
+    console.log(index, elem); // 0 'a'   1 'b'
+}
+
+*/
+
+// if we do not use the for..of loop, we can use next() method
+/*
+let letter = ['a', 'b', 'c'];
+let entries = letter.entries();
+console.log(entries.value); // undefined
+
+console.log(entries.next().value); // [0, 'a']
+console.log(entries.next().value); // [1, 'b']
+console.log(entries.next().value); // [2, 'c']
+*/
+
+/*
+* 7. array instance includes() method, which means that whether the array include the designated element
+* Array.prototype.includes() will return a boolean true for included and false for unincluded.
+* the second argument is the start index
+* */
+
+console.log([1, 2, 3].includes(2)); // true
+[1, 2, 3].includes(4); // false
+[1, 2, 3, NaN].includes(NaN); // true
+[1, 2, 3].includes(3, 3); // false
+[1, 2, 3].includes(3, -1); // true
+
+// es5 use indexOf() !== -1
+if (arr.indexOf(el) !== -1) {
+//    ...
+}
+
+// a replaced function used to compatible with the different browsers
+const contains = ( () =>
+    Array.prototype.includes
+    ? (arr, value) => arr.includes(value)
+    : (arr, value) => arr.some(el => el === value)
+)();
+
+contains (['foo', 'bar'], 'baz'); // false
 
 
 
