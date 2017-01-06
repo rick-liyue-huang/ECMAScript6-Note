@@ -223,11 +223,153 @@ pipe(3).double.pow.reverseInt.get; // 63
 * */
 
 
-// set() 
+// set(), used to property assignment
+/*
+let validator = {
+    set: function (obj, prop, value) {
+        if (prop === 'age') {
+            if (!Number.isInteger(value)) {
+                throw new TypeError('the age is not an integer');
+            }
+            if (value > 200) {
+                throw new RangeError('the age seems invalide');
+            }
+        }
+        obj[prop] = value;
+    }
+};
+
+let person = new Proxy({}, validator);
+
+person.age = 100;
+person.age; // 100
+
+person.age = 'young'; // error
+person.age = 300; //error
+
+*/
+
+// use the set() and get() to avoid the properties to be seen by outside
+/*
+var handler = {
+    get (target, key) {
+        invariant(key, 'get');
+        return target[key];
+    },
+
+    set (target, key, value) {
+        invariant(key, 'set');
+        target[key] = value;
+        return true;
+    }
+};
+
+function invariant(key, action) {
+    if (key[0] === '_') {
+        throw new Error(`invalid attempt to ${action} private "${key}" property`);
+    }
+}
+
+var target = {};
+var proxy = new Proxy(target, handler);
+proxy._prop; // error
+proxy._prop = 'c';// error
+
+*/
+
+// apply method used to handle call and apply, it receive three arguments: target, context object
+// and target's argument array
+
+var hander = {
+    apply (target, ctx, args) {
+        return Reflect.apply(...arguments);
+    }
+};
+
+// one application
+
+/*
+var target = function () {
+    return 'i am the target';
+};
+
+var handler = {
+    apply() {
+        return 'i am the proxy';
+    }
+};
+
+var p = new Proxy(target, handler);
+console.log(p()); // im the proxy
+
+// one more application
+var twice = {
+    apply (target, ctx, args) {
+        return Reflect.apply(...arguments) * 2;
+    }
+};
+
+function sum(left, right) {
+    return left + right;
+}
+
+var proxy = new Proxy(sum, twice);
+proxy(1, 2); // 6
+proxy.call(null, 5, 6); // 22
+proxy.apply(null, [7, 8]); // 30
+*/
 
 
+// has() used to confirm whether object has some property
+/*
+var handler = {
+    has(target, key) {
+        if (key[0] === '_') {
+            return false;
+        }
+        return key in target;
+    }
+};
 
+var target = {_prop: 'foo', prop: 'foo'};
+var proxy = new Proxy(target, handler);
+'_prop' in proxy; // false
 
+*/
+
+// note that: has() only can confirm HasProperty but not the HasOwnProperty
+// by the way, has is invalid to for...in..
+/*
+let stu1 = {name: 'rick', score: 55};
+let stu2 = {name: 'leo', score: 96};
+
+let handler = {
+    has (target, prop) {
+        if (prop === 'score' && target[prop] < 60) {
+            console.log(`${target.name} is fail`);
+            return false;
+        }
+        return prop in target;
+    }
+};
+
+let oproxy1 = new Proxy(stu1, handler);
+let oproxy2 = new Proxy(stu2, handler);
+
+'score' in oproxy1; // fail
+'score' in oproxy2; // true
+
+for (let a in oproxy1) {
+    console.log(oproxy1[a]); // rick 55
+}
+
+for (let b in oproxy2) {
+    console.log(oproxy2[b]); // leo 96
+}
+
+*/
+
+// construct() will handle the new operator, and  must return object
 
 
 
