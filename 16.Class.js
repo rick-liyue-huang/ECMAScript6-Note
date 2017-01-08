@@ -18,6 +18,8 @@ var p = new Point(1, 2); // (1, 2)
 
 */
 
+
+
 // the new method
 /*
 class Point {
