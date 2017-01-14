@@ -252,6 +252,8 @@ export default  class myClass {
 
 // class ColorPoint extends Point {} // ColorPoint inherit from Point
 
+
+
 class ColorPoint extends Point {
     constructor(x, y, color) {
         super(x, y);// call parent class constructor
